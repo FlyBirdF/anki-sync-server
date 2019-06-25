@@ -23,7 +23,8 @@ import anki.storage
 from AnkiServer.collection import CollectionWrapper, CollectionManager
 
 from threading import Thread
-from Queue import Queue
+#python3 lib
+from queue import queue
 
 import time, logging
 
@@ -37,7 +38,7 @@ class ThreadingCollectionWrapper(object):
         self.path = path
         self.wrapper = CollectionWrapper(path, setup_new_collection)
 
-        self._queue = Queue()
+        self._queue = queue()
         self._thread = None
         self._running = False
         self.last_timestamp = time.time()
@@ -64,7 +65,7 @@ class ThreadingCollectionWrapper(object):
         """
 
         if waitForReturn:
-            return_queue = Queue()
+            return_queue = queue()
         else:
             return_queue = None
 
@@ -93,7 +94,7 @@ class ThreadingCollectionWrapper(object):
 
                 try:
                     ret = self.wrapper.execute(func, args, kw, return_queue)
-                except Exception, e:
+                except Exception as e:
                     logging.error('CollectionThread[%s]: Unable to %s(*%s, **%s): %s',
                         self.path, func_name, repr(args), repr(kw), e, exc_info=True)
                     # we return the Exception which will be raise'd on the other end
@@ -101,7 +102,7 @@ class ThreadingCollectionWrapper(object):
 
                 if return_queue is not None:
                     return_queue.put(ret)
-        except Exception, e:
+        except Exception as e:
             logging.error('CollectionThread[%s]: Thread crashed! Exception: %s', self.path, e, exc_info=True)
         finally:
             self.wrapper.close()
