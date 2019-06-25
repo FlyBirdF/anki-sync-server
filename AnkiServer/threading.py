@@ -24,7 +24,7 @@ from AnkiServer.collection import CollectionWrapper, CollectionManager
 
 from threading import Thread
 #python3 lib
-from queue import queue
+from queue import Queue
 
 import time, logging
 
@@ -38,7 +38,7 @@ class ThreadingCollectionWrapper(object):
         self.path = path
         self.wrapper = CollectionWrapper(path, setup_new_collection)
 
-        self._queue = queue()
+        self._queue = Queue()
         self._thread = None
         self._running = False
         self.last_timestamp = time.time()
@@ -65,7 +65,7 @@ class ThreadingCollectionWrapper(object):
         """
 
         if waitForReturn:
-            return_queue = queue()
+            return_queue = Queue()
         else:
             return_queue = None
 
