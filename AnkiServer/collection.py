@@ -69,7 +69,7 @@ class CollectionWrapper(object):
         dirname = os.path.dirname(self.path)
         try:
             os.makedirs(dirname)
-        except OSError, exc:
+        except OSError as exc:
             if exc.errno == errno.EEXIST:
                 pass
             else:
